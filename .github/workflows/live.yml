@@ -60,7 +60,7 @@ jobs:
       # Same flake as local dev and the main CI (ADR-0008): toolchain,
       # cargo-nextest, and the infisical CLI all come from the dev shell.
       - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@main
+        uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
 
       - name: Expose the flake's Rust toolchain on PATH
         run: nix develop --command bash -c 'dirname "$(command -v cargo)" >> "$GITHUB_PATH"'
