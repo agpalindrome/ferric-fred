@@ -24,7 +24,7 @@ jobs:
       # toolchain, cargo-nextest, and cargo-deny versions match exactly — a gate
       # that passes locally passes here.
       - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@main
+        uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
 
       # Swatinem/rust-cache keys its cache off `rustc`/`cargo`, which live in the
       # flake dev shell rather than on the runner's PATH. Expose that bin dir so

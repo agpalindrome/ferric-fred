@@ -61,7 +61,7 @@ jobs:
       # Same flake as dev / CI / live (ADR-0008): the infisical CLI comes from the
       # dev shell. `gh` and `jq` are preinstalled on the runner.
       - name: Install Nix
-        uses: DeterminateSystems/nix-installer-action@main
+        uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25 # v22
 
       # Put the flake's infisical CLI on PATH for the plain shell below. This
       # workflow deliberately does NOT wrap its logic in a single-quoted
