@@ -42,19 +42,44 @@ such, so a future reader does not mistake a considered difference for drift.
 
 ### Shared lessons → canonical owner
 
-Each lesson has **one** canonical ADR (in whichever repo articulated it best);
+Each lesson has **one** canonical owner (in whichever repo articulated it best);
 the others conform by reference. "How ferric-fred conforms" cites this repo's own
 ADRs and is deliberately honest about partials and gaps.
 
+**`rustrolabe` has since migrated its ADR log into an OKF knowledge bundle under
+`knowledge/`**, so the rows below name the **concept** that now carries each
+lesson and keep the ADR number as what that concept absorbed — the reasoning
+stays traceable either way. Those paths live on `rustrolabe`'s `okf` branch and
+are a forward reference until it merges; the numbers still resolve against its
+`main` today. Always write the repo prefix — `rustrolabe` ADR-0044 — because
+`time-value` has ADR-0044 and ADR-0045 of its own.
+
 | # | Shared lesson | Canonical owner | How `ferric-fred` conforms |
 |---|---------------|-----------------|-----------------------------|
-| **L1** | **Types as a first-class design tool** — hold every design to *unrepresentable? at the chokepoint? documents-and-enforces-at-once?* **with the anti-ceremony boundary: genuinely open sets stay strings, and no fallible constructor that removes no real failure mode.** | **`rustrolabe` ADR-0101** | Conforms via **[ADR-0027](0027-types-in-types-out.md)** (and its base, **[ADR-0005](0005-domain-modelling-and-strong-typing.md)**). ferric-fred states the anti-ceremony **boundary** most explicitly of the three — open series ids stay strings, `Frequency::Other`/`SeasonalAdjustment::Other` exist precisely so we don't reject unmodelled values, and id constructors stay **infallible** because a format check removes no mistake a contributor could realistically make. That boundary clause is preserved verbatim in intent here. |
-| **L2** | **Test the class, not the instance; pin every stated assumption** — universals → property tests, finite enums → exhaustive iteration, type invariants → `compile_fail` doctests. | **`rustrolabe` ADR-0107** | **TARGETED conformance** ([ADR-0030](0030-l2-testing-stance-proptest-adopt-or-decline.md), Accepted). ferric-fred's correctness surface is *wire-format fidelity*, owned by **[ADR-0011](0011-testing-strategy.md)**'s layered example-based tests (unit + offline `wiremock` + `#[ignore]`d live authority) plus the agent audit ([ADR-0028](0028-agent-driven-mcp-testing.md)) — so broad `proptest` is **deliberately declined** (few pure-function universals to earn it). The one cheap, high-teeth L2 form *is* adopted: **exhaustive finite-enum round-trips** over the four inbound serde enums (`Frequency`, `SeasonalAdjustment`, `RegionType`, `ShapeType`), where a variant added without its label is otherwise silently swallowed by `Other(String)`. The six outbound query-param enums already meet L2 via an exhaustive `query_code()` match (missing variant = compile error) + existing `query_codes_match_fred()` tests. `compile_fail` doctests: case-by-case, not a sweep. |
-| **L3** | **Typed output layer** — MCP `outputSchema` derived from the real return type via `schemars` (feature-gated), with a conformance test. | **`rustrolabe` ADR-0102** (most rigorous: a real JSON-Schema validator + a negative "corrupt a token → must fail" test) | Conforms via **[ADR-0023](0023-mcp-output-schemas.md)**: `schemars` derive under the *serialize* contract, conformance covered by structured-return tests plus the agent audit ([ADR-0028](0028-agent-driven-mcp-testing.md)). Strong on the **derive**; lighter on the **validator** — no external JSON-Schema spec validator or negative-corruption test yet. A candidate to level up toward the canonical bar. |
-| **L4** | **Closed vs open vocabularies** — `#[non_exhaustive]` always; an `Other(String)` catch-all **only** where a value must survive a serde round-trip; closed sets are curated enums with exhaustive metadata matches. | **`ferric-fred` ADR-0005 / ADR-0027** (this repo owns it — the two-tier *response-bearing vs request-only* articulation is the sharpest of the three) | This repo is **canonical.** [ADR-0005](0005-domain-modelling-and-strong-typing.md) sets the enum-with-`Other`/`#[non_exhaustive]` pattern; [ADR-0027](0027-types-in-types-out.md) draws the open-vs-constrained boundary. Conforming siblings: `rustrolabe` 0046/0103/0105, `time-value` 0034. |
-| **L5** | **Auto-trait profile** — decide `Send`/`Sync` (and friends) deliberately, then **pin it with a compile-time test**. The profile is per-repo; opposite profiles are legitimate. | **`time-value` ADR-0046** | **Conforms** (G1 landed). `crates/ferric-fred/tests/thread_safety.rs` pins the owned public types (`Client`, id newtypes, domain/return types, `#[non_exhaustive]` enums, `Error`) as `Send + Sync + 'static` and the borrowing request builders as `Send + Sync`, using time-value's zero-dependency `fn assert_send_sync<T: Send + Sync>() {}` approach (no `static_assertions`). Green today; it fails to compile if a field ever regresses the profile. Conforming sibling: `rustrolabe` 0011 (the deliberate **inverse**, `Send + !Sync`). |
-| **L6** | **MCP surface hygiene** — read-only + open-world annotations, one-tool-per-operation, CLI/MCP parity, error classification by caller-fixability (`invalid_params` vs `internal_error`), reject unknown params / out-of-range at the boundary. | **`rustrolabe` ADR-0044 + ADR-0045** | Conforms via **[ADR-0010](0010-mcp-server-design.md)** and **[ADR-0023](0023-mcp-output-schemas.md)**. The **agent-driven MCP audit** is a shared *pattern* (ferric-fred [ADR-0028](0028-agent-driven-mcp-testing.md), `rustrolabe` 0088/0095), deliberately **not** wired into the CI gate. **Local specialization:** ferric-fred's "release an MCP-surface change on its own, promptly — Glama scores `main`" rule (`CLAUDE.md`, [ADR-0012](0012-ci-versioning-and-release.md)) is *ferric-fred-specific*, not a shared rule. |
+| **L1** | **Types as a first-class design tool** — hold every design to *unrepresentable? at the chokepoint? documents-and-enforces-at-once?* **with the anti-ceremony boundary: genuinely open sets stay strings, and no fallible constructor that removes no real failure mode.** | **`rustrolabe` `knowledge/principles/an-invariant-is-encoded-in-a-type.md`** — *An invariant is encoded in a type, unless the type prevents no real mistake* (absorbing `rustrolabe` ADR-0101). The anti-ceremony boundary is its section **"The boundary is the half that gets quoted"**, and that concept's closing section records this repo as one of the places it is cited from. | Conforms via **[ADR-0027](0027-types-in-types-out.md)** (and its base, **[ADR-0005](0005-domain-modelling-and-strong-typing.md)**). ferric-fred states the anti-ceremony **boundary** most explicitly of the three — open series ids stay strings, `Frequency::Other`/`SeasonalAdjustment::Other` exist precisely so we don't reject unmodelled values, and id constructors stay **infallible** because a format check removes no mistake a contributor could realistically make. That boundary clause is preserved verbatim in intent here. |
+| **L2** | **Test the class, not the instance; pin every stated assumption** — universals → property tests, finite enums → exhaustive iteration, type invariants → `compile_fail` doctests. | **`rustrolabe` `knowledge/principles/a-claim-earns-a-test.md`** — *A claim earns a test, and a universal claim earns a property test* (absorbing `rustrolabe` ADR-0107) | **TARGETED conformance** ([ADR-0030](0030-l2-testing-stance-proptest-adopt-or-decline.md), Accepted). ferric-fred's correctness surface is *wire-format fidelity*, owned by **[ADR-0011](0011-testing-strategy.md)**'s layered example-based tests (unit + offline `wiremock` + `#[ignore]`d live authority) plus the agent audit ([ADR-0028](0028-agent-driven-mcp-testing.md)) — so broad `proptest` is **deliberately declined** (few pure-function universals to earn it). The one cheap, high-teeth L2 form *is* adopted: **exhaustive finite-enum round-trips** over the four inbound serde enums (`Frequency`, `SeasonalAdjustment`, `RegionType`, `ShapeType`), where a variant added without its label is otherwise silently swallowed by `Other(String)`. The six outbound query-param enums already meet L2 via an exhaustive `query_code()` match (missing variant = compile error) + existing `query_codes_match_fred()` tests. `compile_fail` doctests: case-by-case, not a sweep. |
+| **L3** | **Typed output layer** — MCP `outputSchema` derived from the real return type via `schemars` (feature-gated), with a conformance test. | **`rustrolabe` `knowledge/surfaces/a-tool-declares-its-output.md`** — *A tool declares its output shape, and the declaration is tested against real output* (absorbing `rustrolabe` ADR-0102). Most rigorous of the three: a real JSON-Schema validator + a negative "corrupt a token → must fail" test. The token round-trip extension (`rustrolabe` ADR-0103 / ADR-0105) is `knowledge/surfaces/tokens-round-trip.md`. | Conforms via **[ADR-0023](0023-mcp-output-schemas.md)**: `schemars` derive under the *serialize* contract, conformance covered by structured-return tests plus the agent audit ([ADR-0028](0028-agent-driven-mcp-testing.md)). Strong on the **derive**; lighter on the **validator** — no external JSON-Schema spec validator or negative-corruption test yet. A candidate to level up toward the canonical bar. |
+| **L4** | **Closed vs open vocabularies** — `#[non_exhaustive]` always; an `Other(String)` catch-all **only** where a value must survive a serde round-trip; closed sets are curated enums with exhaustive metadata matches. | **`ferric-fred` ADR-0005 / ADR-0027** (this repo owns it — the two-tier *response-bearing vs request-only* articulation is the sharpest of the three) | This repo is **canonical.** [ADR-0005](0005-domain-modelling-and-strong-typing.md) sets the enum-with-`Other`/`#[non_exhaustive]` pattern; [ADR-0027](0027-types-in-types-out.md) draws the open-vs-constrained boundary. Conforming siblings: `rustrolabe` `knowledge/surfaces/tokens-round-trip.md` and `knowledge/principles/an-invariant-is-encoded-in-a-type.md` (absorbing `rustrolabe` ADR-0046 / ADR-0103 / ADR-0105), `time-value` ADR-0034. |
+| **L5** | **Auto-trait profile** — decide `Send`/`Sync` (and friends) deliberately, then **pin it with a compile-time test**. The profile is per-repo; opposite profiles are legitimate. | **`time-value` ADR-0046** | **Conforms** (G1 landed). `crates/ferric-fred/tests/thread_safety.rs` pins the owned public types (`Client`, id newtypes, domain/return types, `#[non_exhaustive]` enums, `Error`) as `Send + Sync + 'static` and the borrowing request builders as `Send + Sync`, using time-value's zero-dependency `fn assert_send_sync<T: Send + Sync>() {}` approach (no `static_assertions`). Green today; it fails to compile if a field ever regresses the profile. Conforming sibling: `rustrolabe` `knowledge/architecture/the-ephemeris-handle.md` (absorbing `rustrolabe` ADR-0011) — the deliberate **inverse**, `Send + !Sync`. |
+| **L6** | **MCP surface hygiene** — read-only + open-world annotations, one-tool-per-operation, CLI/MCP parity, error classification by caller-fixability (`invalid_params` vs `internal_error`), reject unknown params / out-of-range at the boundary. | **`rustrolabe` — four concepts** (absorbing `rustrolabe` ADR-0044 + ADR-0045). L6 enumerates five disciplines and no single concept discharges them; see **[L6's canonical owner is four concepts](#l6s-canonical-owner-is-four-concepts)** below. | Conforms via **[ADR-0010](0010-mcp-server-design.md)** and **[ADR-0023](0023-mcp-output-schemas.md)**. The **agent-driven MCP audit** is a shared *pattern* (ferric-fred [ADR-0028](0028-agent-driven-mcp-testing.md), `rustrolabe` `knowledge/practice/agents-generate-leads.md`, absorbing `rustrolabe` ADR-0088 / ADR-0095), deliberately **not** wired into the CI gate. **Local specialization:** ferric-fred's "release an MCP-surface change on its own, promptly — Glama scores `main`" rule (`CLAUDE.md`, [ADR-0012](0012-ci-versioning-and-release.md)) is *ferric-fred-specific*, not a shared rule. |
 | **L7** | **Nix-native single toolchain** — `nix develop --command …` is the one toolchain definition, identical locally and in CI. | **3-way identical — no single canonical** (all three are `ADR-0008`) | Conforms via **[ADR-0008](0008-nix-flake-dev-environment.md)**. Because all three repos landed on the identical decision under the same number, none is designated canonical; each repo's ADR-0008 stands on its own. |
+
+#### L6's canonical owner is four concepts
+
+L6 is the one row whose canonical owner does not collapse to a single concept.
+It enumerates five disciplines, and `rustrolabe`'s bundle splits them four ways —
+pointing at any one of them would leave the rest of L6 unowned.
+
+| What L6 enumerates | `rustrolabe` concept |
+|--------------------|----------------------|
+| Read-only and open-world annotations, and the stated scope | `knowledge/surfaces/a-tool-says-what-it-does-to-the-world.md` |
+| Error classification by caller-fixability (`invalid_params` vs `internal_error`) | `knowledge/principles/failures-name-their-remedy.md` |
+| Rejecting unknown parameters and out-of-range values | `knowledge/surfaces/the-boundary-refuses-early.md` |
+| One tool per operation, and CLI/MCP parity | `knowledge/surfaces/the-two-surfaces-expose-the-same-operations.md` |
+
+`knowledge/surfaces/the-boundary-refuses-early.md` also absorbs `rustrolabe`
+ADR-0086 / ADR-0087 / ADR-0098 / ADR-0104, the repo's other refusal-at-the-boundary
+decisions.
 
 ### ferric-fred's deliberate divergences
 
@@ -82,10 +107,12 @@ recorded so a reader does not "correct" ferric-fred toward a sibling.
   canonical ADR, plus an honest ledger of where ferric-fred conforms (L2 by a
   targeted decision, L5 by a compile-time pin), where it is only partial
   (L3-validator), and where a deliberate divergence is on the record.
-- Because the index references canonical ADRs **by number** rather than copying
-  their text, the normative statement of each lesson lives in exactly one place
-  and cannot drift across the three repos. The cost is one indirection: a reader
-  chasing L1's full rationale follows the number to `rustrolabe` ADR-0101.
+- Because the index references canonical owners **by reference** rather than
+  copying their text, the normative statement of each lesson lives in exactly one
+  place and cannot drift across the three repos. The cost is one indirection: a
+  reader chasing L1's full rationale follows the path to `rustrolabe`
+  `knowledge/principles/an-invariant-is-encoded-in-a-type.md`, or the absorbed
+  number to `rustrolabe` ADR-0101 while its `okf` branch is unmerged.
 - Deliberate divergences are on the record, so a future contributor (or the owner
   months later) does not mistake ferric-fred's async/public/no-MSRV choices for
   lag behind a sibling.
@@ -104,7 +131,12 @@ recorded so a reader does not "correct" ferric-fred toward a sibling.
     variant added without its label being silently swallowed by `Other(String)`.
     The L2 row above is updated from *PARTIAL / gap* to reflect it.
 - A small ongoing cost: when a shared discipline moves in its canonical repo, this
-  index is a place that may need a one-line update to stay accurate.
+  index is a place that may need a one-line update to stay accurate. **That cost
+  came due on 2026-08-16**, when `rustrolabe` migrated its 186 ADRs into an OKF
+  knowledge bundle and prepared to delete `docs/adr/` wholesale. The rows above
+  were repointed at the absorbing concepts, keeping the ADR numbers beside them;
+  no decision recorded here changed, so this was a reference repair rather than a
+  supersession.
 
 ## Alternatives considered
 

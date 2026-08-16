@@ -19,8 +19,10 @@ Two sibling projects by the same owner have since named this stance explicitly a
 found it worth recording as a first-class principle rather than a collection of
 local habits:
 
-- `rustrolabe` **ADR-0101** ("types are a first-class design tool") holds every
-  design to three questions: *can the wrong state be made unrepresentable? can the
+- `rustrolabe` **`knowledge/principles/an-invariant-is-encoded-in-a-type.md`**
+  (*"An invariant is encoded in a type, unless the type prevents no real
+  mistake"*, absorbing `rustrolabe` **ADR-0101**, "types are a first-class design
+  tool") holds every design to three questions: *can the wrong state be made unrepresentable? can the
   invariant live in a type at the chokepoint every path funnels through? does the
   type communicate the behaviour to a reader and the compiler at once?* It also
   draws an explicit **boundary**: a type that adds ceremony without removing a real
