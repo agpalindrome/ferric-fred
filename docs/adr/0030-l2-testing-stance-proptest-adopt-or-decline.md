@@ -9,7 +9,9 @@
 [ADR-0029](0029-shared-disciplines-across-the-sibling-rust-mcp-repos.md) (the
 cross-repo shared-disciplines index) records ferric-fred as **PARTIAL / gap** on
 shared lesson **L2** — *"test the class, not the instance; pin every stated
-assumption"* — whose canonical owner is `rustrolabe` ADR-0107. The L2 discipline
+assumption"* — whose canonical owner is `rustrolabe`
+`knowledge/principles/a-claim-earns-a-test.md` (*"A claim earns a test, and a
+universal claim earns a property test"*, absorbing `rustrolabe` ADR-0107). The L2 discipline
 has three concrete forms:
 
 1. **Universals → property tests** (`proptest`): an assertion true for *all*
@@ -122,8 +124,10 @@ specifically.
   pure-function universals (a non-trivial pagination cursor arithmetic, a
   date-window computation), a scoped `proptest` for *that* can be added under this
   ADR's "adopt where it closes a real gap" principle without reversing it.
-- L2's canonical statement stays owned by `rustrolabe` ADR-0107; this ADR only
-  records ferric-fred's conforming *position*, by reference.
+- L2's canonical statement stays owned by `rustrolabe`
+  `knowledge/principles/a-claim-earns-a-test.md` (absorbing `rustrolabe`
+  ADR-0107); this ADR only records ferric-fred's conforming *position*, by
+  reference.
 
 ## Alternatives considered
 
