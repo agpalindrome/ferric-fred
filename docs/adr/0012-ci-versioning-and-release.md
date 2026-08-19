@@ -60,7 +60,7 @@ can't run in CI (no Infisical machine identity —
   mis-sizes a bump. Accepted — the discipline is already in place.
 - Two repo secrets/permissions to manage; publishing is gated on
   `CARGO_REGISTRY_TOKEN`, which only the owner can set, so the mechanism can land
-  before the first publish is authorised.
+  before the first publish is authorized.
 - Independent versions mean the internal path-dep requirements drift over time;
   `release-plz` maintains them, but any manual `cargo` edit must keep them
   consistent.

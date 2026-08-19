@@ -10,7 +10,7 @@ create *in this repo* — the global config only guards universal catastrophes.
 ## Keep documentation current
 
 Documentation is part of the change, not a follow-up. **Before opening any PR,
-check whether it touches user-facing behavior, the public API, or a design
+check whether it touches user-facing behaviour, the public API, or a design
 decision, and update the affected docs in the same PR.** The doc surfaces here:
 
 - **Workspace `README.md`** — CLI usage examples, the MCP tool table, and the

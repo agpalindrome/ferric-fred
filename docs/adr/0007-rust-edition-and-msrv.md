@@ -7,7 +7,7 @@
 ## Context
 
 We must pick a Rust edition and decide how conservative to be about the minimum
-supported Rust version (MSRV). This is a young project optimising for velocity
+supported Rust version (MSRV). This is a young project optimizing for velocity
 over enterprise-toolchain reach.
 
 ## Decision

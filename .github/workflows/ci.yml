@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   check:
-    name: fmt · clippy · test · deny
+    name: fmt · clippy · test · deny · prose
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -61,3 +61,10 @@ jobs:
 
       - name: Dependency policy (licenses, advisories, bans, sources)
         run: nix develop --command bash -c "cargo deny check"
+
+      # The shared house-style prose rules (ADR-0031). vale comes from the flake
+      # like every other gate here, pinned to 3.17.1 by the `nixpkgs-vale` input.
+      # The script holds the scope filter, the empty-list assertion and
+      # `--no-global`, so this step and a local run are the same code.
+      - name: Prose gate (vale)
+        run: nix develop --command bash -c "scripts/prose-lint.sh"

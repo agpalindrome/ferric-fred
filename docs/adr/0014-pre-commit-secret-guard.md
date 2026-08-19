@@ -48,7 +48,7 @@ same `core.hooksPath = .githooks` that enables `pre-push` enables it.
 - One package (`gitleaks`) joins the dev shell. Because both layers scan only
   staged content, per-commit latency stays low (tens of milliseconds).
 - Local hooks are advisory: a contributor can `git commit --no-verify`, so this
-  stops honest mistakes, not a determined actor. A defense-in-depth `gitleaks`
+  stops honest mistakes, not a determined actor. A defence-in-depth `gitleaks`
   run in CI (over the PR/branch) is a natural follow-up, left out of scope here.
 - The guard is not a substitute for rotating any key that does leak.
 
