@@ -39,8 +39,8 @@ principle itself, nor the two places the discipline currently stops short:
    validation (`ids.rs`: "Construction does no validation for now"), and
    `Error::InvalidInput` exists but is used only for the missing-`FRED_API_KEY`
    case. This is a deliberate, defensible choice for *open* identifiers — but it has
-   never been distinguished, in writing, from the cases where a value really is
-   constrained and a mistake really is possible.
+   never been distinguished, in writing, from the cases where a value is
+   constrained and a mistake is possible.
 2. **Some invariants live in runtime checks, not types.** The MCP layer enforces
    FRED's "give both or neither" pairing rules with hand-written `if`s
    (`crates/ferric-fred-mcp/src/main.rs`: `realtime_start`/`realtime_end` must come

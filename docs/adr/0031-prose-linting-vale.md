@@ -73,16 +73,25 @@ is no blog, no CV, no marketing copy — so the ADR log, the READMEs and
   reporting a rule as broken: `~/.claude/scripts/sync-vale.sh --check .`.
 - CI pays a second nixpkgs evaluation. The fetch is cached, and the cost buys a
   linter version that moves independently of the compiler.
-- Adoption flagged existing ADR prose. Four misspellings against the Oxford
-  British convention were corrected as typo fixes, which the append-only ADR rule
-  permits. Five word-choice flags — three `really`, one `very`, one `simply` —
-  were left for the owner, because rewriting settled prose to satisfy a linter is
-  the failure mode this gate is supposed to avoid, not an instance of it.
-- The `simply` flag is a finding for `~/.claude`. `Prose.Condescending` reports
-  that `simply` "tells a stuck reader the thing is easy", and at
-  `0030-l2-testing-stance-proptest-adopt-or-decline.md:114` the word means
-  *merely*. `Prose.Merely` already draws exactly this distinction for `just` and
-  demotes it to a warning; `Prose.Condescending` has no matching carve-out.
+- Adoption flagged existing ADR prose, and the owner settled all of it. Four
+  misspellings against the Oxford British convention were corrected as typo
+  fixes, which the append-only ADR rule permits. Five word-choice flags — three
+  `really`, one `very`, one `simply` — were then cut on the owner's ruling.
+  Four were single-word deletions changing no claim. The fifth, `ff` — `very`
+  short, became `two characters`, because the concrete count is what the
+  intensifier was gesturing at.
+- The `simply` flag was raised upstream as a rule bug and decided against.
+  `agpalindrome/claude#64` argued that `Prose.Condescending` calls the word
+  condescending while ADR-0030 used it to mean *merely*, and asked for the
+  carve-out `Prose.Merely` already makes for `just`. The handler put six
+  merely-sense instances through the delete test, found that deleting the word
+  changed the meaning of none of them, and ruled that `simply` is not
+  load-bearing the way `just` is in "not just X". The rule kept its level and
+  gained a message leading with the delete test. So the word is cut here rather
+  than exempted.
+- That ruling also exercised the staleness hazard above rather than only
+  describing it. This branch was carrying a `Prose.Condescending` written before
+  the ruling, and `sync-vale.sh --check` is what caught it.
 
 ## Alternatives considered
 

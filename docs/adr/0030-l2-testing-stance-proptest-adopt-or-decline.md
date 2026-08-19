@@ -113,8 +113,7 @@ specifically.
   implicit-in-practice absence, closing the ADR-0029 G2 action item.
 - The example-based strategy of ADR-0011 stands as the primary correctness
   mechanism, now with an *explicit rationale* tied to the crate's wire-fidelity
-  risk shape — not left looking like a lesson ferric-fred simply hasn't caught up
-  to.
+  risk shape — not left looking like a lesson ferric-fred hasn't caught up to.
 - A small, high-teeth safety net appears around the four inbound serde enums:
   adding a variant without its label becomes a test failure instead of a silent
   `Other(String)` swallow. The six outbound query-param enums are left as-is —
