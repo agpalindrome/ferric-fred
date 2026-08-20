@@ -38,7 +38,14 @@ cargo clippy --all-targets -- -D warnings  # lints; warnings are errors
 cargo nextest run                        # the offline test suite
 cargo test --doc                         # doctests
 cargo deny check                         # licenses, advisories, bans, sources
+scripts/prose-lint.sh                    # house-style prose rules on the tracked markdown
 ```
+
+The prose gate ([ADR-0031](docs/adr/0031-prose-linting-vale.md)) runs `vale` over
+every tracked `*.md` except the generated per-crate changelogs. Errors block and
+warnings do not. The rules under `.vale/` are a vendored copy of a shared style,
+so fix the writing rather than the rule — if a rule looks wrong, say so in the PR
+instead of editing `.vale/styles/` here.
 
 Enable the tracked git hooks once per clone (`core.hooksPath` is local config and
 isn't carried by git):

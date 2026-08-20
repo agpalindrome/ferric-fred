@@ -50,8 +50,8 @@ We will name the binaries **`fred`** (from `ferric-fred-cli`) and **`fred-mcp`**
 - **`ferric-fred` as the binary** — matches the crate and project name and is
   unambiguous, but long to type for a CLI used interactively. Rejected for
   ergonomics; the crate name already carries the unambiguous identifier.
-- **`ff`** — very short, but cryptic and at high risk of colliding with other
-  tools. Rejected.
+- **`ff`** — two characters, but cryptic and at high risk of colliding with
+  other tools. Rejected.
 - **One multiplexed binary** (e.g. `fred mcp` launching the server) — rejected:
   the MCP server is a long-lived stdio JSON-RPC endpoint with a different
   lifecycle from the interactive CLI; a distinct `fred-mcp` keeps the two

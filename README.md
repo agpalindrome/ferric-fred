@@ -80,7 +80,7 @@ A Nix flake provides a reproducible toolchain (`nix develop`, or `direnv allow`
 once), but the project builds with a plain Rust toolchain too — Nix supplies the
 environment, not the build ([ADR-0008](docs/adr/0008-nix-flake-dev-environment.md)).
 
-Contributor setup, the fmt/clippy/test **gate**, the tracked git hooks, and the
+Contributor setup, the fmt/clippy/test/prose **gate**, the tracked git hooks, and the
 workflow for adding an endpoint live in **[CONTRIBUTING.md](CONTRIBUTING.md)**.
 CI (`ci.yml`) runs that same offline gate on every push and PR; a dormant
 `live.yml` runs the live FRED tests once an Infisical machine identity is

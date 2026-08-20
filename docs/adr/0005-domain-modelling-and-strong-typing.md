@@ -9,7 +9,7 @@
 ## Context
 
 The whole premise of `ferric-fred` is a *strongly-typed* client: the FRED API
-returns many fields that are really enumerations or identifiers wearing string
+returns many fields that are enumerations or identifiers wearing string
 clothes (`frequency`, `units`, `seasonal_adjustment`, `aggregation_method`,
 `filter_variable`, `order_by`, `sort_order`), plus date-stamped observation
 values where missing data is the literal string `"."`. We want the type system
